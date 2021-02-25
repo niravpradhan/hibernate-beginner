@@ -5,16 +5,18 @@
     <session-factory>
 
         <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://mysqlcluster26.registeredsite.com:3306/mytestdb</property>
-        <property name="connection.username">mytestdbuser</property>
-        <property name="connection.password">MkP1978786</property>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://mysqlcluster26.registeredsite.com:3306/mytestdb</property>
+        <property name="hibernate.connection.username">mytestdbuser</property>
+        <property name="hibernate.connection.password">MkP1978786</property>
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
         <!-- Echo all executed SQL to stdout -->
-        <property name="show_sql">true</property>
+        <property name="hibernate.show_sql">true</property>
+
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
     </session-factory>
 
