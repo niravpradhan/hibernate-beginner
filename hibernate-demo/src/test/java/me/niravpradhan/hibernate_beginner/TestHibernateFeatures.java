@@ -3,6 +3,7 @@ package me.niravpradhan.hibernate_beginner;
 import me.niravpradhan.hibernate_beginner.entities.Author;
 import me.niravpradhan.hibernate_beginner.entities.Book;
 import me.niravpradhan.hibernate_beginner.entities.Review;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 
 @SpringBootTest
 class TestHibernateFeatures {
@@ -18,6 +20,7 @@ class TestHibernateFeatures {
     EntityManager em;
 
     @Test
+    @Order(2)
     @Transactional
     @Rollback(false)
     void test_createAuthor() {
@@ -29,6 +32,7 @@ class TestHibernateFeatures {
     }
 
     @Test
+    @Order(3)
     @Transactional
     @Rollback(false)
     void test_createBook() {
@@ -39,6 +43,7 @@ class TestHibernateFeatures {
     }
 
     @Test
+    @Order(4)
     @Transactional
     @Rollback(false)
     void test_manytoone_bidirectional_relationship() {
@@ -52,6 +57,7 @@ class TestHibernateFeatures {
     }
 
     @Test
+    @Order(5)
     @Transactional
     @Rollback(false)
     void test_manytomay_bidirectional_association() {
@@ -63,5 +69,22 @@ class TestHibernateFeatures {
         author.addBook(book);
 
         em.persist(author);
+    }
+
+    @Test
+    @Order(6)
+    @Transactional
+    @Rollback(false)
+    void test_how_to_map_a_java_util_Date() {
+        Author author = new Author();
+        author.setFirstName("Amita");
+        author.setLastName("Pradhan");
+        author.setDateOfBirth(new Date(80, 0, 8));
+
+        em.persist(author);
+        em.flush();
+
+        author = em.find(Author.class, author.getId());
+        System.out.printf("%s%n", author);
     }
 }
