@@ -1,6 +1,7 @@
 package me.niravpradhan.hibernate_beginner;
 
 import me.niravpradhan.hibernate_beginner.entities.Author;
+import me.niravpradhan.hibernate_beginner.entities.AuthorStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,19 +20,28 @@ class TestHibernateFeatures {
     @Test
     @Transactional
     @Rollback(false)
-    void test_How_to_persist_LocalDate_and_LocalDateTime_with_JPA() {
+    void test_mapping_enum_ordinal_to_database_column() {
+        // change the database table author, remove existing author_status column if present
         Author author = new Author();
-        author.setFirstName("Dilip");
+        author.setFirstName("Gargi");
         author.setLastName("Pradhan");
-        author.setDateOfBirth(LocalDate.of(1942, 1, 27));
+        author.setDateOfBirth(LocalDate.of(1980, 1, 21));
+        author.setStatus(AuthorStatus.SELF_PUBLISHED);
 
         em.persist(author);
     }
 
     @Test
-    void test_How_to_read_LocalDate_and_LocalDateTime_with_JPA() {
-        Author author = em.find(Author.class, 4L);
+    @Transactional
+    @Rollback(false)
+    void test_mapping_enum_string_to_database_column() {
+        // change the database table author, remove existing author_status column if present
+        Author author = new Author();
+        author.setFirstName("Gargi");
+        author.setLastName("Pradhan");
+        author.setDateOfBirth(LocalDate.of(1980, 1, 21));
+        author.setStatus(AuthorStatus.SELF_PUBLISHED);
 
-        System.out.printf("%s%n", author);
+        em.persist(author);
     }
 }
