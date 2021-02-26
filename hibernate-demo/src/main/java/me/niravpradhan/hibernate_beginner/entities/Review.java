@@ -21,7 +21,7 @@ public class Review implements Serializable {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "fk_book")
     private Book book;
 
     public Long getId() {
