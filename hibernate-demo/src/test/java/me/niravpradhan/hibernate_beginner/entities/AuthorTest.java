@@ -1,31 +1,28 @@
 package me.niravpradhan.hibernate_beginner.entities;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.service.ServiceRegistry;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
+@SpringBootTest
 class AuthorTest {
 
+    @Autowired
+    EntityManager em;
+
     @Test
+    @Transactional
+    @Rollback(false)
     void createAuthor() {
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().configure().build();
-
-        SessionFactory sessionFactory = new MetadataSources(serviceRegistry).addAnnotatedClass(Author.class)
-            .buildMetadata().buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
         Author author = new Author();
-        author.setFirstName("Nirav");
+        author.setFirstName("Amita");
         author.setLastName("Pradhan");
 
-        session.save(author);
-
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
+        em.persist(author);
     }
 }

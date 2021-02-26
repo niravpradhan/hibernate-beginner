@@ -7,53 +7,9 @@
     <groupId>me.niravpradhan</groupId>
     <artifactId>hibernate-beginner</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
     <modules>
         <module>hibernate-demo</module>
     </modules>
-    <packaging>pom</packaging>
-
-    <properties>
-        <encoding>UTF-8</encoding>
-        <java_version>11</java_version>
-        <maven.compiler.source>${java_version}</maven.compiler.source>
-        <maven.compiler.target>${java_version}</maven.compiler.target>
-        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
-
-        <hibernate_version>5.4.27.Final</hibernate_version>
-        <slf4j_version>1.7.30</slf4j_version>
-        <mysql_connector_version>8.0.23</mysql_connector_version>
-        <junit5_version>5.7.1</junit5_version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql_connector_version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit5_version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
 </project>
