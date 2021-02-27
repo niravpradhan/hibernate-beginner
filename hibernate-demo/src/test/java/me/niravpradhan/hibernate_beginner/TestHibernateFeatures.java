@@ -21,6 +21,7 @@ class TestHibernateFeatures {
     @Transactional
     @Rollback(false)
     void test_createAuthor() {
+        // Make Sure you connect to database which supports table sequences
         Author author = new Author();
         author.setFirstName("John");
         author.setLastName("Doe");
