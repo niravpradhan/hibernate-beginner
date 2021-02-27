@@ -20,28 +20,17 @@ class TestHibernateFeatures {
     @Test
     @Transactional
     @Rollback(false)
-    void test_mapping_enum_ordinal_to_database_column() {
-        // change the database table author, remove existing author_status column if present
+    void test_createAuthor() {
         Author author = new Author();
-        author.setFirstName("Gargi");
-        author.setLastName("Pradhan");
-        author.setDateOfBirth(LocalDate.of(1980, 1, 21));
-        author.setStatus(AuthorStatus.SELF_PUBLISHED);
+        author.setFirstName("John");
+        author.setLastName("Doe");
+        author.setDateOfBirth(LocalDate.of(2001, 1, 1));
+        author.setStatus(AuthorStatus.NOT_PUBLISHED);
 
+        System.out.println("Persisting a new entity");
         em.persist(author);
-    }
 
-    @Test
-    @Transactional
-    @Rollback(false)
-    void test_mapping_enum_string_to_database_column() {
-        // change the database table author, remove existing author_status column if present
-        Author author = new Author();
-        author.setFirstName("Gargi");
-        author.setLastName("Pradhan");
-        author.setDateOfBirth(LocalDate.of(1980, 1, 21));
-        author.setStatus(AuthorStatus.SELF_PUBLISHED);
-
-        em.persist(author);
+        System.out.println("Calling em flush method");
+        em.flush();
     }
 }
