@@ -1,14 +1,6 @@
 package me.niravpradhan.hibernate_beginner.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,13 +8,14 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @Entity
+@Table(name = "author", schema = "mytestdb")
 public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="AUTHOR_SEQUENCE")
-    @SequenceGenerator(name = "AUTHOR_SEQUENCE", sequenceName = "AUTHOR_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="author_sequence")
+    @SequenceGenerator(name = "author_sequence", sequenceName = "author_seq")
     private Long id;
 
     private String firstName;
