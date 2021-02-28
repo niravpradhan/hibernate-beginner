@@ -1,13 +1,8 @@
 package me.niravpradhan.hibernate_beginner.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Version;
+import me.niravpradhan.hibernate_beginner.dtos.AuthorDTO;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +10,25 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @Entity
+@NamedNativeQuery(name = "Author.selectAll", query = "select a.id, a.first_name, a.last_name, a.date_of_birth, a.version, a.status from author a")
+@NamedNativeQuery(name = "Author.selectAllWithBooksCount", query = "select a.id, a.first_name, a.last_name, a.date_of_birth, " +
+        "a.status, a.version, (ba.fk_author) as num_of_books from author a " +
+        "left join book_author ba on a.id = ba.fk_author")
+@SqlResultSetMapping(
+        name = "AuthorDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = AuthorDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "first_name", type = String.class),
+                        @ColumnResult(name = "last_name", type = String.class),
+                        @ColumnResult(name = "date_of_birth", type = LocalDate.class),
+                        @ColumnResult(name = "status", type = String.class),
+                        @ColumnResult(name = "version"),
+                        @ColumnResult(name = "num_of_books", type = Long.class),
+                }
+        )
+)
 public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +39,7 @@ public class Author implements Serializable {
 
     private String firstName;
 
-    private  String lastName;
+    private String lastName;
 
     private LocalDate dateOfBirth;
 

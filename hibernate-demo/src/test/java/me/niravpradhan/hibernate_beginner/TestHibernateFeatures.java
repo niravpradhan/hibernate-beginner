@@ -1,5 +1,7 @@
 package me.niravpradhan.hibernate_beginner;
 
+import me.niravpradhan.hibernate_beginner.dtos.AuthorDTO;
+import me.niravpradhan.hibernate_beginner.entities.Author;
 import me.niravpradhan.hibernate_beginner.entities.Order;
 import me.niravpradhan.hibernate_beginner.entities.OrderItem;
 import me.niravpradhan.hibernate_beginner.entities.Product;
@@ -12,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -48,83 +51,64 @@ class TestHibernateFeatures {
     @Test
     @Transactional
     @Rollback(false)
-    @org.junit.jupiter.api.Order(1)
-    void test_createProducts() {
-        logger.info("PERSISTING PRODUCTS...");
+    void test_nativeSQLQuery() {
+        Query nativeQuery = em.createNativeQuery("select a.first_name, a.last_name from author a");
+        List<Object[]> resultList = nativeQuery.getResultList();
 
-        Product p1 = createProduct("IPhone", "IPhone 10", new BigDecimal("1000"));
-        Product p2 = createProduct("IPhone", "IPhone 11", new BigDecimal("1500"));
-        Product p3 = createProduct("IPhone", "IPhone 12", new BigDecimal("2000"));
-
-        em.persist(p1);
-        em.persist(p2);
-        em.persist(p3);
+        resultList.forEach((Object[] a) -> System.out.printf("Author %s %s%n", a[0], a[1]));
     }
 
     @Test
     @Transactional
     @Rollback(false)
-    @org.junit.jupiter.api.Order(2)
-    void test_createOrder() {
-        logger.info("PERSISTING ORDER...");
+    void test_positional_parameters_binding() {
+        Query nativeQuery = em.createNativeQuery("select a.first_name, a.last_name from author a where a.id = ?");
+        nativeQuery.setParameter(1, 7L);
+        Object[] result = (Object[]) nativeQuery.getSingleResult();
 
-        Order order = createOrder("A1");
-        em.persist(order);
+        System.out.printf("Author %s %s%n", result[0], result[1]);
     }
 
     @Test
     @Transactional
     @Rollback(false)
-    @org.junit.jupiter.api.Order(3)
-    void test_createOrderItems() {
-        logger.info("PERSISTING ORDER ITEMS...");
+    void test_named_parameters_binding() {
+        Query nativeQuery = em.createNativeQuery("select a.first_name, a.last_name from author a where a.id = :id");
+        nativeQuery.setParameter("id", 7L);
+        Object[] result = (Object[]) nativeQuery.getSingleResult();
 
-        Product p1 = em.find(Product.class, 1L);
-        Product p2 = em.find(Product.class, 2L);
-        Product p3 = em.find(Product.class, 3L);
-
-        Order order = em.find(Order.class, 1L);
-
-        OrderItem orderItem1 = createOrderItem(1, p1, order);
-        OrderItem orderItem2 = createOrderItem(1, p2, order);
-        OrderItem orderItem3 = createOrderItem(1, p3, order);
-
-        em.persist(orderItem1);
-        em.persist(orderItem2);
-        em.persist(orderItem3);
+        System.out.printf("Author %s %s%n", result[0], result[1]);
     }
 
     @Test
     @Transactional
     @Rollback(false)
-    void test_eagerLoading() {
-        OrderItem orderItem = em.find(OrderItem.class, 1L);
+    void test_native_query_result_to_entity_mapping() {
+        Query nativeQuery = em.createNativeQuery("select a.id, a.first_name, a.last_name, a.date_of_birth, a.version, a.status from author a", Author.class);
+        List<Author> authors = nativeQuery.getResultList();
 
-        logger.info("PRODUCT NAME: " + orderItem.getProduct().getName());
+        authors.forEach(a -> System.out.printf("Author %s %s%n", a.getFirstName(), a.getLastName()));
     }
 
     @Test
     @Transactional
     @Rollback(false)
-    void test_onetomany_lazy_loading() {
-        List<Order> orders = em.createQuery("select distinct o from Order o").getResultList();
+    void test_native_query_result_to_dto_mapping() {
+        Query nativeQuery = em.createNativeQuery("select a.id, a.first_name, a.last_name, a.date_of_birth, " +
+                "a.status, a.version, (ba.fk_author) as num_of_books from author a " +
+                "left join book_author ba on a.id = ba.fk_author", "AuthorDTOMapping");
+        List<AuthorDTO> authors = nativeQuery.getResultList();
 
-        logger.info("PRINTING EACH ORDER'S ITEMS NAME");
-        orders.stream()
-                .flatMap(o -> o.getItems().stream())
-                .forEach(oi -> System.out.println("PRODUCT NAME: " + oi.getProduct().getName()));
-
+        authors.forEach(a -> System.out.printf("Author %s %s -> total book = %d%n", a.getFirstName(), a.getLastName(), a.getNumOfBooks()));
     }
 
     @Test
     @Transactional
     @Rollback(false)
-    void test_onetomany_eager_loading() {
-        List<Order> orders = em.createQuery("select distinct o from Order o join fetch o.items oi").getResultList();
+    void test_native_named_query_result_to_dto_mapping() {
+        Query nativeQuery = em.createNamedQuery("Author.selectAllWithBooksCount");
+        List<Object[]> authors = nativeQuery.getResultList();
 
-        logger.info("PRINTING EACH ORDER'S ITEMS NAME");
-        orders.stream()
-                .flatMap(o -> o.getItems().stream())
-                .forEach(oi -> System.out.println("PRODUCT NAME: " + oi.getProduct().getName()));
+        authors.forEach((Object[] a) -> System.out.printf("Author %s %s -> total book = %d%n", a[1], a[2], a[6]));
     }
 }
