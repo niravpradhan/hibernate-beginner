@@ -1,7 +1,6 @@
 package me.niravpradhan.hibernate_beginner.entities.converters;
 
 import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 import java.sql.Date;
 import java.time.LocalDate;
 

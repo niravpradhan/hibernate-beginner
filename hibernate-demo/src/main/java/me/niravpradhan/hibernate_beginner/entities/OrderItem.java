@@ -8,9 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import java.io.Serializable;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "order_items")

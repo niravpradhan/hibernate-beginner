@@ -1,6 +1,5 @@
 package me.niravpradhan.hibernate_beginner.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,6 +46,5 @@ public class Review implements Serializable {
     public void setBook(Book book) {
         this.book = book;
     }
-
 
 }

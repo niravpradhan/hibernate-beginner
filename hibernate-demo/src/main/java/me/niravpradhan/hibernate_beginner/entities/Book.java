@@ -1,19 +1,23 @@
 package me.niravpradhan.hibernate_beginner.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SqlResultSetMapping(
+        name = "BookMapping",
+        entities = {
+                @EntityResult(
+                        entityClass = Book.class,
+                        fields = {
+                                @FieldResult(name = "id", column = "id"),
+                                @FieldResult(name = "title", column = "title"),
+                                @FieldResult(name = "version", column = "version")
+                        }
+                )
+        })
 public class Book implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,7 +36,7 @@ public class Book implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "book_author", joinColumns = {@JoinColumn(name = "fk_book", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "fk_author", referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name = "fk_author", referencedColumnName = "id")}
     )
     private List<Author> authors = new ArrayList<>();
 
