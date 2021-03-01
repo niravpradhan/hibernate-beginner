@@ -105,7 +105,7 @@ class TestHibernateFeatures {
     @Test
     @Transactional
     @Rollback(false)
-    void test_native_named_query_result_to_dto_mapping() {
+    void test_native_named_query() {
         Query nativeQuery = em.createNamedQuery("Author.selectAllWithBooksCount");
         List<Object[]> authors = nativeQuery.getResultList();
 
