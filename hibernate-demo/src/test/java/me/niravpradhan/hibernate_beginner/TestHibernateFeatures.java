@@ -152,18 +152,26 @@ class TestHibernateFeatures {
     @Transactional
     @Rollback(false)
     @org.junit.jupiter.api.Order(5)
-    void test_native_query_result_implicit_mapping() {
+    void test_first_page() {
+        int pageNo = 1;
+        int pageSize = 2;
         Query nativeQuery = em.createNativeQuery("select * from book", Book.class);
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult((pageNo - 1) * pageSize);
         List<Book> books = nativeQuery.getResultList();
-        books.forEach(b -> System.out.println(b.getTitle()));
+        books.stream().map(Book::getTitle).forEach(System.out::println);
     }
 
     @Test
     @Transactional
     @Rollback(false)
     @org.junit.jupiter.api.Order(6)
-    void test_native_query_result_explicit_mapping() {
-        Query nativeQuery = em.createNativeQuery("select * from book", "BookMapping");
+    void test_second_page() {
+        int pageNo = 2;
+        int pageSize = 2;
+        Query nativeQuery = em.createNativeQuery("select * from book", Book.class);
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult((pageNo - 1) * pageSize);
         List<Book> books = nativeQuery.getResultList();
         books.stream().map(Book::getTitle).forEach(System.out::println);
     }
